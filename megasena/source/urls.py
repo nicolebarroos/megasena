@@ -23,5 +23,6 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view()),
     path('token/refresh', TokenRefreshView.as_view()),
     path('', include('users.urls')),
+    path('', include('game.urls')),
 
 ]
