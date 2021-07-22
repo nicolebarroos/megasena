@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'source.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'megasena',
+        'NAME': 'megasena_db',
         'USER': 'postgres',
         'PASSWORD': 'ni81662527',
         'HOST': '127.0.0.1',

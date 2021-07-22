@@ -14,7 +14,7 @@ def get_results():
 
     results = []
     for i in table:
-        results.append(i.get_text('\n'))
+        results.append(int(i.get_text()))
     print(results)
 
     time.sleep(10)

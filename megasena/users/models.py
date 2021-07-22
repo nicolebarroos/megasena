@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class Users(AbstractUser):
-    name = models.CharField('Name', max_length=50)
+    email = models.CharField('Email', max_length=50)
 
     class Meta:
         verbose_name = 'Usuário'

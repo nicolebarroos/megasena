@@ -5,58 +5,61 @@ from rest_framework.response import Response
 from game.models import Plays
 from game.serializer import PLaysSerializer
 from utils import get_results
-import numpy as np
+import random
 from datetime import datetime
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def generate_dozens(request):
+def play_game(request):
     dozens = request.data['dozens']
     user = request.user
     try:
-        list_dozens = np.random.randint(1, 60, (dozens))
+        list_dozens = random.sample(range(1,61),dozens)
+        result_megasena = get_results()
+
         Plays.objects.create(
-            dozens=list_dozens,
+            first_dozen=list_dozens[0],
+            second_dozen=list_dozens[1],
+            third_dozen=list_dozens[2],
+            fourth_dozen=list_dozens[3],
+            fifth_dozen=list_dozens[4],
+            sixth_dozen=list_dozens[5],
             creation_date=datetime.now(),
             user=user
         )
-        return Response({'Dezenas geradas': list_dozens})
+        total_result = []
+        for i in result_megasena:
+            for j in list_dozens:
+                if i == j:
+                    total_result.append(i)
+        if len(total_result) >= 4:
+            return Response({'Você acertou o número mínimo de combinações: ': total_result})
+
+        if result_megasena == list_dozens:
+            return Response({'Segue os resultados da mega sena': result_megasena,
+                             'Seus resultados ': list_dozens})
+
+        else:
+            return Response({'Segue os resultados da mega sena': result_megasena,
+                             'Seus resultados ': list_dozens})
+
     except Exception as e:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
 def play_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        plays = Plays.objects.all()
+    if request.user.is_staff:
+        plays = Plays.objects.filter(user=request.user)
         serializer = PLaysSerializer(plays, many=True)
         return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def play_game(request):
-    user = request.user
-    try:
-        get_dozens = Plays.objects.filter(user=user).values()
-        last_dozen = get_dozens[0]['dozens']
-        result_megasena = get_results()
-        if last_dozen == result_megasena:
-            return Response({'Message': 'Você acertou!'})
-        else:
-            return Response({'Message': 'Você errou!'})
-    except Exception:
+    else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'DELETE'])
 def plays_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
+
     try:
         play = Plays.objects.get(pk=pk)
     except Exception:
@@ -65,14 +68,6 @@ def plays_detail(request, pk):
     if request.method == 'GET':
         serializer = PLaysSerializer(play)
         return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = PLaysSerializer(play, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         play.delete()
