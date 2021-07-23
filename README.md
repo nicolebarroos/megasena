@@ -5,7 +5,7 @@
 ### Objetivo:
 
 Esse projeto tem como objetivo construir uma API que faça jogos da mega sena, o usuario deverá escolher a quantidade de dezenas por jogo e sua API irá gerar aleatoriamente dezenas para o usuário. O usuário poderá consultar o resultado do ultimo jogo e comparar com suas dezenas para conferir quantos numeros acertou.
-Para obter o ultimo resultado da megasena foi desenvolvido um webscrapping no Google, para obter dados do último resultado da mega sena.
+Para obter o ultimo resultado da megasena foi desenvolvido um webscrapping no Google.
 
 
 ### Instalação:
