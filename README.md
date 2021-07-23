@@ -1,4 +1,5 @@
-# WEBSCRAPING/API RESULTADOS MEGA SENA
+# MegaSena
+## Api Rest | Webscraping 
 
 
 ### Objetivo:
@@ -33,5 +34,4 @@ Para obter o ultimo resultado da megasena foi desenvolvido um webscrapping no Go
 ### Ativando o sistema:
 >python manage.py runserver
 
-### Coleção Postman:
-[Documentação Postman](https://www.getpostman.com/collections/5687c7c04cdea059d09d)
+[Coleção Postman](https://www.getpostman.com/collections/5687c7c04cdea059d09d)
