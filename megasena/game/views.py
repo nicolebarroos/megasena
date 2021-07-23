@@ -12,12 +12,16 @@ from datetime import datetime
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def play_game(request):
+    #user informs the number of tens he wants to try his luck
     dozens = request.data['dozens']
     user = request.user
     try:
+        #a list of random numbers from 1 to 60 is created, the size of the list is equivalent to the number of tens entered
         list_dozens = random.sample(range(1,61),dozens)
+        #here we call the script that performs the webscraping and store the mega result in a variable
         result_megasena = get_results()
 
+        #we create an object containing the user's move
         Plays.objects.create(
             first_dozen=list_dozens[0],
             second_dozen=list_dozens[1],
@@ -28,6 +32,7 @@ def play_game(request):
             creation_date=datetime.now(),
             user=user
         )
+        #here we check if the user has hit at least four mega sena numbers (according to the official game rules)
         total_result = []
         for i in result_megasena:
             for j in list_dozens:
@@ -35,11 +40,6 @@ def play_game(request):
                     total_result.append(i)
         if len(total_result) >= 4:
             return Response({'Você acertou o número mínimo de combinações: ': total_result})
-
-        if result_megasena == list_dozens:
-            return Response({'Segue os resultados da mega sena': result_megasena,
-                             'Seus resultados ': list_dozens})
-
         else:
             return Response({'Segue os resultados da mega sena': result_megasena,
                              'Seus resultados ': list_dozens})
